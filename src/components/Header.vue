@@ -7,6 +7,7 @@
       <v-btn text small to="/portfolio">Portfolio</v-btn>
       <v-btn text small to="/stocks">Stocks</v-btn>
       <v-spacer></v-spacer>
+      <span>Funds: <strong>{{ funds}}</strong></span>
       <v-btn text small>End Day</v-btn>
       <div>
         <v-menu offset-y>
@@ -33,6 +34,11 @@ export default {
       { name: "teste", link: "/teste" },
       { name: "teste", link: "/teste" }
     ]
-  })
+  }),
+  computed: {
+    funds() {
+      return this.$store.getters.funds;
+    }
+  }
 };
 </script>
