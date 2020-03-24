@@ -7,7 +7,7 @@
           <v-list-item-title class="headline mb-1">Price: {{stock.price}}</v-list-item-title>
           <v-list-item-title class="headline mb-1">Quantity: {{stock.quantity}}</v-list-item-title>
           <v-list-item-subtitle>
-            <v-text-field type="number" label="Quantity" filled v-model="quantity"></v-text-field>
+            <v-text-field type="number" label="Quantity" filled v-model="quantity" :error="insufficientQuantity"></v-text-field>
           </v-list-item-subtitle>
         </v-list-item-content>
 
@@ -18,7 +18,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="success" @click="sellStock" :disabled="quantity <= 0">Sell</v-btn>
+        <v-btn color="success" @click="sellStock" :disabled="quantity <= 0 || insufficientQuantity">
+          {{ insufficientQuantity ? 'Not enough Stocks' : 'Sell'}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-col>
@@ -33,6 +34,14 @@ export default {
     return {
       quantity: 0
     };
+  },
+  computed: {
+    funds() {
+      return this.$store.funds.quantity;
+    },
+    insufficientQuantity() {
+      return this.quantity > this.stock.quantity;
+    }
   },
   methods: {
     ...mapActions({

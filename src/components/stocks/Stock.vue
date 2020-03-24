@@ -6,7 +6,7 @@
           <div class="overline mb-4">{{stock.name}}</div>
           <v-list-item-title class="headline mb-1">Price: {{stock.price}}</v-list-item-title>
           <v-list-item-subtitle>
-            <v-text-field type="number" label="Quantity" filled v-model="quantity"></v-text-field>
+            <v-text-field type="number" label="Quantity" filled v-model="quantity" :error="insufficientFunds"></v-text-field>
           </v-list-item-subtitle>
         </v-list-item-content>
 
@@ -17,7 +17,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="success" @click="buyStock" :disabled="quantity <= 0">Buy</v-btn>
+        <v-btn color="success" @click="buyStock" :disabled="quantity <= 0 || insufficientFunds">{{ insufficientFunds ? 'Insufficient Funds' : 'Buy'}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-col>
@@ -30,6 +30,14 @@ export default {
     return {
       quantity: 0
     };
+  },
+  computed: {
+    funds() {
+      return this.$store.getters.funds;
+    },
+    insufficientFunds() {
+      return this.quantity * this.stock.price > this.funds;
+    }
   },
   methods: {
       buyStock() {
