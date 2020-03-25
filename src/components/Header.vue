@@ -7,9 +7,8 @@
       <v-btn text small to="/portfolio">Portfolio</v-btn>
       <v-btn text small to="/stocks">Stocks</v-btn>
       <v-spacer></v-spacer>
-      <span>Funds: <strong>{{ funds}}</strong></span>
-      <v-btn text small>End Day</v-btn>
-      <div>
+      <v-btn text small @click="endDay">End Day</v-btn>
+      <div class="mr-5">
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn color="primary" small dark v-on="on">Save & Load</v-btn>
@@ -23,11 +22,14 @@
           </v-list>
         </v-menu>
       </div>
+      <span>Funds: <strong>{{ funds | currency}}</strong></span>
     </v-app-bar>
   </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 export default {
   data: () => ({
     sublinks: [
@@ -38,6 +40,14 @@ export default {
   computed: {
     funds() {
       return this.$store.getters.funds;
+    }
+  },
+  methods: {
+    ...mapActions([
+      'randomizeStocks'
+    ]),
+    endDay() {
+      this.randomizeStocks();
     }
   }
 };
